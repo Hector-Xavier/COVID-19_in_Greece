@@ -105,6 +105,7 @@ plot(daily_timeline_data_correction[1,],type="l",main="Median-based correction f
 
 daily_timeline_data_omission <- daily_timeline_data[1,]
 daily_timeline_data_omission[as.integer(weekdays(daily_timeline_data_dates))<=2] <- NA
+
 plot(daily_timeline_data_omission,type="p",main="Complete removal of Sunday & Monday")
 
 rm(index_of_comparison,weekday_correlations,weekday_temp_data,i)
@@ -208,8 +209,8 @@ png(file=file.path(paste(getwd(),paste("05 - Optimal segmentation [Greece total]
 plot(timeline_for_segmentation_omission,type="p",xaxt="n",xlab="",ylab="log2 - scaled daily cases",main="Greece daily new cases [omission of Sunday & Monday]")
 plot.segmented(temp_segmentation,add=TRUE, res=FALSE,res.col=1,rug=FALSE,prev.trend=FALSE,conf.level=0.5,shade=TRUE,col=c("darkblue","red3")[as.integer(slope(temp_segmentation)$x[,1]>0)+1],lwd=2)
 abline(v=round(temp_segmentation$psi[,2]))
-legend("bottomright",legend=paste(c(range(daily_timeline_data_dates[as.integer(weekdays(daily_timeline_data_dates))>2])[1],daily_timeline_data_dates[as.integer(weekdays(daily_timeline_data_dates))>2][round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
-axis(1,at=seq(length(daily_timeline_data_dates[as.integer(weekdays(daily_timeline_data_dates))>2])),labels=as.character(daily_timeline_data_dates[as.integer(weekdays(daily_timeline_data_dates))>2]),las=2)
+legend("bottomright",legend=paste(c(range(daily_timeline_data_dates)[1],daily_timeline_data_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
+axis(1,at=seq(length(daily_timeline_data_dates)),labels=as.character(daily_timeline_data_dates),las=2)
 dev.off()
 
 temp_data_frame <- data.frame(x=seq(length(timeline_for_segmentation_smoothed)),y=timeline_for_segmentation_smoothed)
@@ -400,7 +401,7 @@ for (i in 1:dim(cumulative_cases_regional)[1])
     plot(timeline_for_segmentation,type="p",xaxt="n",xlab="",ylab="log2 - scaled daily cases",main=paste("Daily new cases [",rownames(cumulative_cases_regional)[i],"] - initial data",sep=""))
     plot.segmented(temp_segmentation,add=TRUE, res=FALSE,res.col=1,rug=FALSE,prev.trend=FALSE,conf.level=0.5,shade=TRUE,col=c("darkblue","red3")[as.integer(slope(temp_segmentation)$x[,1]>0)+1],lwd=2)
     abline(v=round(temp_segmentation$psi[,2]))
-    legend("bottomright",legend=paste(c(range(cumulative_cases_dates)[1],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
+    legend("bottomright",legend=paste(c(cumulative_cases_dates[seq(length(timeline_for_segmentation))[!is.na(timeline_for_segmentation)][1]],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
     axis(1,at=seq(length(cumulative_cases_dates)),labels=as.character(cumulative_cases_dates),las=2)
     dev.off()
     
@@ -415,7 +416,7 @@ for (i in 1:dim(cumulative_cases_regional)[1])
     plot(timeline_for_segmentation_corrected,type="p",xaxt="n",xlab="",ylab="log2 - scaled daily cases",main=paste("Daily new cases [",rownames(cumulative_cases_regional)[i],"] - correction for weekend testing"))
     plot.segmented(temp_segmentation,add=TRUE, res=FALSE,res.col=1,rug=FALSE,prev.trend=FALSE,conf.level=0.5,shade=TRUE,col=c("darkblue","red3")[as.integer(slope(temp_segmentation)$x[,1]>0)+1],lwd=2)
     abline(v=round(temp_segmentation$psi[,2]))
-    legend("bottomright",legend=paste(c(range(cumulative_cases_dates)[1],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
+    legend("bottomright",legend=paste(c(cumulative_cases_dates[seq(length(timeline_for_segmentation_corrected))[!is.na(timeline_for_segmentation_corrected)][1]],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
     axis(1,at=seq(length(cumulative_cases_dates)),labels=as.character(cumulative_cases_dates),las=2)
     dev.off()
     
@@ -430,7 +431,7 @@ for (i in 1:dim(cumulative_cases_regional)[1])
     plot(timeline_for_segmentation_omission,type="p",xaxt="n",xlab="",ylab="log2 - scaled daily cases",main=paste("Daily new cases [",rownames(cumulative_cases_regional)[i],"] - omission of Sunday & Monday"))
     plot.segmented(temp_segmentation,add=TRUE, res=FALSE,res.col=1,rug=FALSE,prev.trend=FALSE,conf.level=0.5,shade=TRUE,col=c("darkblue","red3")[as.integer(slope(temp_segmentation)$x[,1]>0)+1],lwd=2)
     abline(v=round(temp_segmentation$psi[,2]))
-    legend("bottomright",legend=paste(c(range(cumulative_cases_dates[as.integer(weekdays(cumulative_cases_dates))>2])[1],cumulative_cases_dates[as.integer(weekdays(cumulative_cases_dates))>2][round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
+    legend("bottomright",legend=paste(c(cumulative_cases_dates[seq(length(timeline_for_segmentation_omission))[!is.na(timeline_for_segmentation_omission)][1]],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
     axis(1,at=seq(length(cumulative_cases_dates)),labels=as.character(cumulative_cases_dates),las=2)
     dev.off()
     
@@ -558,7 +559,7 @@ for (i in 1:length(levels(as.factor(temporary_cumulative_cases_regional_context[
     plot(timeline_for_segmentation,type="p",xaxt="n",xlab="",ylab="log2 - scaled daily cases",main=paste("Daily new cases [",levels(as.factor(temporary_cumulative_cases_regional_context[,1]))[i],"] - initial data",sep=""))
     plot.segmented(temp_segmentation,add=TRUE, res=FALSE,res.col=1,rug=FALSE,prev.trend=FALSE,conf.level=0.5,shade=TRUE,col=c("darkblue","red3")[as.integer(slope(temp_segmentation)$x[,1]>0)+1],lwd=2)
     abline(v=round(temp_segmentation$psi[,2]))
-    legend("bottomright",legend=paste(c(range(cumulative_cases_dates)[1],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
+    legend("bottomright",legend=paste(c(cumulative_cases_dates[seq(length(timeline_for_segmentation))[!is.na(timeline_for_segmentation)][1]],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
     axis(1,at=seq(length(cumulative_cases_dates)),labels=as.character(cumulative_cases_dates),las=2)
     dev.off()
     
@@ -573,7 +574,7 @@ for (i in 1:length(levels(as.factor(temporary_cumulative_cases_regional_context[
     plot(timeline_for_segmentation_corrected,type="p",xaxt="n",xlab="",ylab="log2 - scaled daily cases",main=paste("Daily new cases [",levels(as.factor(temporary_cumulative_cases_regional_context[,1]))[i],"] - correction for weekend testing"))
     plot.segmented(temp_segmentation,add=TRUE, res=FALSE,res.col=1,rug=FALSE,prev.trend=FALSE,conf.level=0.5,shade=TRUE,col=c("darkblue","red3")[as.integer(slope(temp_segmentation)$x[,1]>0)+1],lwd=2)
     abline(v=round(temp_segmentation$psi[,2]))
-    legend("bottomright",legend=paste(c(range(cumulative_cases_dates)[1],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
+    legend("bottomright",legend=paste(c(cumulative_cases_dates[seq(length(timeline_for_segmentation_corrected))[!is.na(timeline_for_segmentation_corrected)][1]],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
     axis(1,at=seq(length(cumulative_cases_dates)),labels=as.character(cumulative_cases_dates),las=2)
     dev.off()
     
@@ -588,8 +589,8 @@ for (i in 1:length(levels(as.factor(temporary_cumulative_cases_regional_context[
     plot(timeline_for_segmentation_omission,type="p",xaxt="n",xlab="",ylab="log2 - scaled daily cases",main=paste("Daily new cases [",levels(as.factor(temporary_cumulative_cases_regional_context[,1]))[i],"] - omission of Sunday & Monday"))
     plot.segmented(temp_segmentation,add=TRUE, res=FALSE,res.col=1,rug=FALSE,prev.trend=FALSE,conf.level=0.5,shade=TRUE,col=c("darkblue","red3")[as.integer(slope(temp_segmentation)$x[,1]>0)+1],lwd=2)
     abline(v=round(temp_segmentation$psi[,2]))
-    legend("bottomright",legend=paste(c(range(cumulative_cases_dates[as.integer(weekdays(cumulative_cases_dates))>2])[1],cumulative_cases_dates[as.integer(weekdays(cumulative_cases_dates))>2][round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
-    axis(1,at=seq(length(cumulative_cases_dates[as.integer(weekdays(cumulative_cases_dates))>2])),labels=as.character(cumulative_cases_dates[as.integer(weekdays(cumulative_cases_dates))>2]),las=2)
+    legend("bottomright",legend=paste(c(cumulative_cases_dates[seq(length(timeline_for_segmentation_omission))[!is.na(timeline_for_segmentation_omission)][1]],cumulative_cases_dates[round(temp_segmentation$psi[,2])]),c(", now doubling every ",", now halved every ")[as.integer(1/slope(temp_segmentation)$x[,1]<=0)+1],abs(round(1/slope(temp_segmentation)$x[,1]))," days",sep=""),pch=15,col=c("darkblue","red3")[(as.integer(slope(temp_segmentation)$x[,1]>0)+1)])
+    axis(1,at=seq(length(cumulative_cases_dates)),labels=as.character(cumulative_cases_dates),las=2)
     dev.off()
     
     rm(temp_data_frame,temp_linear_model,temp_segmentation,timeline_for_segmentation,timeline_for_segmentation_corrected,timeline_for_segmentation_omission)
