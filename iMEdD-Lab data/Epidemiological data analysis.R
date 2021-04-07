@@ -1,9 +1,7 @@
 library(chron)
-#library(gplots)
 
 directory <- "Z:/Covid-19 researches/iMEdD-Lab data"
 setwd(directory)
-
 
 #Epidimiological data
 daily_timeline_data <- read.csv("greeceTimeline.csv",stringsAsFactors=FALSE)
